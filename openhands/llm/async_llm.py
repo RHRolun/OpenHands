@@ -30,7 +30,7 @@ class AsyncLLM(LLM):
             api_version=self.config.api_version,
             custom_llm_provider=self.config.custom_llm_provider,
             max_tokens=self.config.max_output_tokens,
-            timeout=self.config.timeout,
+            timeout=6000,
             temperature=self.config.temperature,
             top_p=self.config.top_p,
             drop_params=self.config.drop_params,
