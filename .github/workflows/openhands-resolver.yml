@@ -258,6 +258,10 @@ jobs:
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
           LLM_TIMEOUT: 3600
+          LLM_RETRY_MIN_WAIT: "30"  # Wait at least 30 seconds between retries
+          LLM_RETRY_MAX_WAIT: "180"  # Maximum wait of 3 minutes between retries
+          LLM_NUM_RETRIES: "5"  # Increase number of retry attempts
+          LLM_RETRY_MULTIPLIER: "2.0"  # Double the wait time between each retry
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
