@@ -593,7 +593,7 @@ def get_default_sandbox_config_for_eval() -> SandboxConfig:
         remote_runtime_api_url=os.environ.get('SANDBOX_REMOTE_RUNTIME_API_URL'),
         keep_runtime_alive=False,
         remote_runtime_init_timeout=3600,
-        remote_runtime_api_timeout=120,
+        remote_runtime_api_timeout=6000,
         remote_runtime_enable_retries=True,
         remote_runtime_class='sysbox',
     )
