@@ -257,17 +257,18 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          LLM_TIMEOUT: 300
-          REQUEST_TIMEOUT: 300
-          OPENAI_REQUEST_TIMEOUT: 300
-          ANTHROPIC_TIMEOUT_SEC: 300
-          OPENAI_TIMEOUT_SEC: 300
-          HTTP_CLIENT_TIMEOUT: 300
-          REQUESTS_TIMEOUT: 300
-          LITELLM_REQUEST_TIMEOUT: 300
+          LITELLM_RETRY_ON_FAILURE: "true"
+          LITELLM_RETRY_COUNT: "15"
+          LITELLM_RETRY_DELAY: "20"
+          LITELLM_ENABLE_RETRY: "true"
           LITELLM_MAX_RETRIES: "15"
-          LITELLM_BACKOFF_TIME: "20"
-          LITELLM_MAX_DELAY: "60"
+          LITELLM_REQUEST_TIMEOUT: "300"
+          REQUEST_TIMEOUT: "300"
+          OPENAI_REQUEST_TIMEOUT: "300"
+          ANTHROPIC_TIMEOUT_SEC: "300"
+          OPENAI_TIMEOUT_SEC: "300"
+          HTTP_CLIENT_TIMEOUT: "300"
+          REQUESTS_TIMEOUT: "300"
           SANDBOX_TIMEOUT: "6000"
           SANDBOX_COMMAND_TIMEOUT: "1200"
           OPENHANDS_SANDBOX_TIMEOUT: "1200"
@@ -276,7 +277,7 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create config file with 5-minute timeout settings
+          # Create config file with LiteLLM specific retry format
           cat > /tmp/config.toml << EOL
           [llm]
           model = "${LLM_MODEL}"
@@ -285,27 +286,23 @@ jobs:
           api_version = "${LLM_API_VERSION}"
           temperature = 0.0
 
-          # 5-minute timeout settings
+          # Base timeout
           timeout = 300
           request_timeout = 300
 
-          # Retry settings tuned for 5-minute timeout
-          num_retries = 15
-          retry_min_wait = 20
-          retry_max_wait = 60
-          retry_multiplier = 1.5
-
-          # LiteLLM specific settings
-          litellm_max_retries = 15
-          litellm_timeout = 300
-          litellm_initial_delay = 20
-          litellm_backoff = 1.5
-          litellm_max_delay = 60
+          # LiteLLM specific retry configuration
+          retry_config = { num_retries = 15, retry_delay = 20, exponential_backoff = true, exponential_multiplier = 1.5, max_retry_delay = 60 }
 
           [core]
           debug = true
           log_level = "debug"
           attempts_before_error = 25
+
+          [litellm]
+          retry_on_failure = true
+          retry_count = 15
+          retry_delay = 20
+          max_retries = 15
           EOL
 
           # Copy config to /tmp and print debug info
