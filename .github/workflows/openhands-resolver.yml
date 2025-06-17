@@ -38,7 +38,10 @@ on:
         required: false
         type: number
         default: 1200
-        description: "Custom sandbox env"
+      LLM_TIMEOUT:
+        required: false
+        type: number
+        default: 1200
       runner:
         required: false
         type: string
@@ -254,6 +257,7 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
+          LLM_TIMEOUT: 3600
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
@@ -265,7 +269,8 @@ jobs:
             --issue-type ${{ env.ISSUE_TYPE }} \
             --max-iterations ${{ env.MAX_ITERATIONS }} \
             --comment-id ${{ env.COMMENT_ID }} \
-            --is-experimental ${{ steps.install_openhands.outputs.isExperimental }}
+            --is-experimental ${{ steps.install_openhands.outputs.isExperimental }} \
+            --timeout ${{ env.LLM_TIMEOUT }}
 
       - name: Check resolution result
         id: check_result
@@ -291,6 +296,7 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
+          LLM_TIMEOUT: 3600
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
