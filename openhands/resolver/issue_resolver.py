@@ -528,7 +528,7 @@ class IssueResolver:
         Args:
             reset_logger: Whether to reset the logger for multiprocessing.
         """
-
+        print("PRINTS WORK RESOLVE_ISSUE FUNC?????????????????????????????")
         issue = self.extract_issue()
 
         if self.comment_id is not None:
