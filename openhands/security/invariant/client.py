@@ -5,7 +5,7 @@ import httpx
 
 
 class InvariantClient:
-    timeout: int = 120
+    timeout: int = 6000
 
     def __init__(self, server_url: str, session_id: str | None = None) -> None:
         self.server = server_url
