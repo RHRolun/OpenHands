@@ -267,6 +267,9 @@ jobs:
           OPENAI_TIMEOUT_SEC: "1200"      # Specific to OpenAI API
           HTTP_CLIENT_TIMEOUT: "1200"     # For the HTTP client itself
           REQUESTS_TIMEOUT: "1200"        # General requests timeout
+          SANDBOX_TIMEOUT: "1200"
+          SANDBOX_COMMAND_TIMEOUT: "1200"
+          OPENHANDS_SANDBOX_TIMEOUT: "1200"
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
