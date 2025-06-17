@@ -34,6 +34,11 @@ on:
         type: string
         default: ""
         description: "Custom sandbox env"
+      timeout:
+        required: false
+        type: number
+        default: 1200
+        description: "Custom sandbox env"
       runner:
         required: false
         type: string
@@ -187,6 +192,7 @@ jobs:
           echo "MAX_ITERATIONS=${{ inputs.max_iterations || 50 }}" >> $GITHUB_ENV
           echo "SANDBOX_ENV_GITHUB_TOKEN=${{ secrets.PAT_TOKEN || github.token }}" >> $GITHUB_ENV
           echo "SANDBOX_BASE_CONTAINER_IMAGE=${{ inputs.base_container_image }}" >> $GITHUB_ENV
+          echo "LLM_TIMEOUT=${{ inputs.timeout }}" >> $GITHUB_ENV
 
           # Set branch variables
           echo "TARGET_BRANCH=${{ inputs.target_branch || 'main' }}" >> $GITHUB_ENV
