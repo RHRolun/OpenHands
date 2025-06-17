@@ -262,6 +262,11 @@ jobs:
           LLM_RETRY_MAX_WAIT: "180"  # Maximum wait of 3 minutes between retries
           LLM_NUM_RETRIES: "5"  # Increase number of retry attempts
           LLM_RETRY_MULTIPLIER: "2.0"  # Double the wait time between each retry
+          OPENAI_REQUEST_TIMEOUT: "1200"  # Direct timeout for the underlying request
+          ANTHROPIC_TIMEOUT_SEC: "1200"   # Specific to Anthropic API
+          OPENAI_TIMEOUT_SEC: "1200"      # Specific to OpenAI API
+          HTTP_CLIENT_TIMEOUT: "1200"     # For the HTTP client itself
+          REQUESTS_TIMEOUT: "1200"        # General requests timeout
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
