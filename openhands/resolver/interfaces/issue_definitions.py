@@ -23,6 +23,7 @@ class ServiceContext:
     def __init__(self, strategy: IssueHandlerInterface, llm_config: LLMConfig | None):
         self._strategy = strategy
         if llm_config is not None:
+            print(llm_config)
             self.llm = LLM(llm_config)
 
     def set_strategy(self, strategy: IssueHandlerInterface) -> None:
@@ -399,6 +400,7 @@ class ServiceContextIssue(ServiceContext):
             git_patch=git_patch or self.default_git_patch,
         )
 
+        print(self.llm)
         response = self.llm.completion(messages=[{'role': 'user', 'content': prompt}])
 
         answer = response.choices[0].message.content.strip()
