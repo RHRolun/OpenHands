@@ -181,6 +181,8 @@ class LLM(RetryMixin, DebugMixin):
             kwargs['max_tokens'] = self.config.max_output_tokens
             kwargs.pop('max_completion_tokens')
 
+        print("LLM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        
         self._completion = partial(
             litellm_completion,
             model=self.config.model,
