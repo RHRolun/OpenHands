@@ -182,7 +182,7 @@ model = "gpt-4o"
 #temperature = 0.0
 
 # Timeout for the API
-#timeout = 0
+timeout = 1200
 
 # Top p for the API
 #top_p = 1.0

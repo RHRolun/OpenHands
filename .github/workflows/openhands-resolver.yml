@@ -257,16 +257,17 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          LLM_TIMEOUT: 3600
-          LLM_RETRY_MIN_WAIT: "30"  # Wait at least 30 seconds between retries
-          LLM_RETRY_MAX_WAIT: "180"  # Maximum wait of 3 minutes between retries
-          LLM_NUM_RETRIES: "5"  # Increase number of retry attempts
+          LLM_TIMEOUT: 6000
+          LLM_RETRY_MIN_WAIT: "60"  # Wait at least 60 seconds between retries
+          LLM_RETRY_MAX_WAIT: "300"  # Maximum wait of 5 minutes between retries
+          LLM_NUM_RETRIES: "10"  # Increase number of retry attempts
           LLM_RETRY_MULTIPLIER: "2.0"  # Double the wait time between each retry
           OPENAI_REQUEST_TIMEOUT: "6000"  # Direct timeout for the underlying request
           ANTHROPIC_TIMEOUT_SEC: "6000"   # Specific to Anthropic API
           OPENAI_TIMEOUT_SEC: "6000"      # Specific to OpenAI API
           HTTP_CLIENT_TIMEOUT: "6000"     # For the HTTP client itself
           REQUESTS_TIMEOUT: "6000"        # General requests timeout
+          LITELLM_REQUEST_TIMEOUT: "6000" # LiteLLM specific timeout
           SANDBOX_TIMEOUT: "6000"
           SANDBOX_COMMAND_TIMEOUT: "1200"
           OPENHANDS_SANDBOX_TIMEOUT: "1200"
