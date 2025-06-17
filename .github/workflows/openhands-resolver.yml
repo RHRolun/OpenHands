@@ -276,8 +276,9 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create config file
-          cat > /tmp/config.toml << EOL
+          # Create directories and config file
+          mkdir -p /workspace
+          cat > /workspace/config.toml << EOL
           [llm]
           model = "${LLM_MODEL}"
           api_key = "${LLM_API_KEY}"
@@ -290,12 +291,28 @@ jobs:
           retry_max_wait = 300
           retry_multiplier = 2.0
 
+          [llm.litellm_settings]
+          timeout = 6000
+          max_retries = 10
+          initial_delay = 60
+          exponential_base = 2
+          max_delay = 300
+
           [core]
           debug = true
+          attempts_before_error = 20
           EOL
 
+          # Copy config to /tmp and print debug info
+          cp /workspace/config.toml /tmp/config.toml
+          echo "=== Config file contents ==="
+          cat /workspace/config.toml
+          echo "=== Config locations ==="
+          ls -la /workspace/config.toml /tmp/config.toml
+
           export OPENHANDS_CONFIG=/tmp/config.toml
-          cd /tmp && python -m openhands.resolver.resolve_issue \
+          python -m openhands.resolver.resolve_issue \
+            --config-file /workspace/config.toml \
             --selected-repo ${{ github.repository }} \
             --issue-number ${{ env.ISSUE_NUMBER }} \
             --issue-type ${{ env.ISSUE_TYPE }} \
@@ -336,7 +353,8 @@ jobs:
           if [ "${{ steps.check_result.outputs.RESOLUTION_SUCCESS }}" == "true" ]; then
             # Use existing config file for pull request creation
             export OPENHANDS_CONFIG=/tmp/config.toml
-            cd /tmp && python -m openhands.resolver.send_pull_request \
+            python -m openhands.resolver.send_pull_request \
+              --config-file /workspace/config.toml \
               --issue-number ${{ env.ISSUE_NUMBER }} \
               --target-branch ${{ env.TARGET_BRANCH }} \
               --pr-type ${{ inputs.pr_type || 'draft' }} \
