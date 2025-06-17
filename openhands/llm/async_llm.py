@@ -2,6 +2,7 @@ import asyncio
 from functools import partial
 from typing import Any, Callable
 
+import litellm
 from litellm import acompletion as litellm_acompletion
 
 from openhands.core.exceptions import UserCancelledError
@@ -42,8 +43,8 @@ class AsyncLLM(LLM):
         @self.retry_decorator(
             num_retries=self.config.num_retries,
             retry_exceptions=LLM_RETRY_EXCEPTIONS,
-            retry_min_wait=self.config.retry_min_wait,
-            retry_max_wait=self.config.retry_max_wait,
+            retry_min_wait=6000,
+            retry_max_wait=6100,
             retry_multiplier=self.config.retry_multiplier,
         )
         async def async_completion_wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -121,6 +122,7 @@ class AsyncLLM(LLM):
 
     async def _call_acompletion(self, *args: Any, **kwargs: Any) -> Any:
         """Wrapper for the litellm acompletion function."""
+        litellm.request_timeout = 6000  # default timeout in seconds
         # Used in testing?
         return await litellm_acompletion(*args, **kwargs)
 
