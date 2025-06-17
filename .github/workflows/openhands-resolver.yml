@@ -276,9 +276,8 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create directories and config file
-          mkdir -p /workspace
-          cat > /workspace/config.toml << EOL
+          # Create config file in /tmp
+          cat > /tmp/config.toml << EOL
           [llm]
           model = "${LLM_MODEL}"
           api_key = "${LLM_API_KEY}"
@@ -304,15 +303,14 @@ jobs:
           EOL
 
           # Copy config to /tmp and print debug info
-          cp /workspace/config.toml /tmp/config.toml
           echo "=== Config file contents ==="
-          cat /workspace/config.toml
-          echo "=== Config locations ==="
-          ls -la /workspace/config.toml /tmp/config.toml
+          cat /tmp/config.toml
+          echo "=== Config location ==="
+          ls -la /tmp/config.toml
 
           export OPENHANDS_CONFIG=/tmp/config.toml
           python -m openhands.resolver.resolve_issue \
-            --config-file /workspace/config.toml \
+            --config-file /tmp/config.toml \
             --selected-repo ${{ github.repository }} \
             --issue-number ${{ env.ISSUE_NUMBER }} \
             --issue-type ${{ env.ISSUE_TYPE }} \
@@ -354,7 +352,7 @@ jobs:
             # Use existing config file for pull request creation
             export OPENHANDS_CONFIG=/tmp/config.toml
             python -m openhands.resolver.send_pull_request \
-              --config-file /workspace/config.toml \
+              --config-file /tmp/config.toml \
               --issue-number ${{ env.ISSUE_NUMBER }} \
               --target-branch ${{ env.TARGET_BRANCH }} \
               --pr-type ${{ inputs.pr_type || 'draft' }} \
