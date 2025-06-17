@@ -54,7 +54,7 @@ class SandboxConfig(BaseModel):
     )
     runtime_container_image: str | None = Field(default=None)
     user_id: int = Field(default=os.getuid() if hasattr(os, 'getuid') else 1000)
-    timeout: int = Field(default=120)
+    timeout: int = Field(default=6000)
     remote_runtime_init_timeout: int = Field(default=180)
     remote_runtime_api_timeout: int = Field(default=10)
     remote_runtime_enable_retries: bool = Field(default=True)
