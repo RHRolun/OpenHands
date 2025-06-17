@@ -190,7 +190,7 @@ class LLM(RetryMixin, DebugMixin):
             base_url=self.config.base_url,
             api_version=self.config.api_version,
             custom_llm_provider="openai",
-            timeout=self.config.timeout,
+            timeout=6000,
             top_p=self.config.top_p,
             drop_params=self.config.drop_params,
             seed=self.config.seed,
