@@ -257,21 +257,24 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
+          # Set timeout and retry settings
+          TIMEOUT: 1200
           LLM_TIMEOUT: 1200
-          LLM_NUM_RETRIES: "8"
+          REQUESTS_TIMEOUT: 1200
+          OPENAI_REQUEST_TIMEOUT: 1200
           LLM_RETRY_MIN_WAIT: "15"
           LLM_RETRY_MAX_WAIT: "120"
+          LLM_NUM_RETRIES: "8"
           LLM_RETRY_MULTIPLIER: "2.0"
-          REQUESTS_TIMEOUT: "1200"
-          SANDBOX_TIMEOUT: "6000"
-          SANDBOX_COMMAND_TIMEOUT: "1200"
-          OPENHANDS_SANDBOX_TIMEOUT: "1200"
+          # Required LLM settings
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
+          # Sandbox settings
+          SANDBOX_TIMEOUT: 300
           PYTHONPATH: ""
         run: |
-          # Create config file line by line
+          # Create config file matching template settings
           echo "[llm]" > /tmp/config.toml
           echo "model = \"$LLM_MODEL\"" >> /tmp/config.toml
           echo "api_key = \"$LLM_API_KEY\"" >> /tmp/config.toml
@@ -293,18 +296,12 @@ jobs:
           echo "=== Config file contents ==="
           cat /tmp/config.toml
 
-          # Debug output
-          echo "=== Config file contents ==="
-          cat /tmp/config.toml
-
-
           # Copy config to /tmp and print debug info
           echo "=== Config file contents ==="
           cat /tmp/config.toml
           echo "=== Config location ==="
           ls -la /tmp/config.toml
 
-          export OPENHANDS_CONFIG=/tmp/config.toml
           cd /tmp && python -m openhands.resolver.resolve_issue \
             --selected-repo ${{ github.repository }} \
             --issue-number ${{ env.ISSUE_NUMBER }} \
@@ -337,14 +334,13 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          LLM_TIMEOUT: 3600
+          LLM_TIMEOUT: 1200
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
           if [ "${{ steps.check_result.outputs.RESOLUTION_SUCCESS }}" == "true" ]; then
-            # Use existing config file for pull request creation
             export OPENHANDS_CONFIG=/tmp/config.toml
             cd /tmp && python -m openhands.resolver.send_pull_request \
               --issue-number ${{ env.ISSUE_NUMBER }} \
@@ -353,6 +349,7 @@ jobs:
               --reviewer ${{ github.actor }} | tee pr_result.txt && \
               grep "PR created" pr_result.txt | sed 's/.*\///g' > pr_number.txt
           else
+            export OPENHANDS_CONFIG=/tmp/config.toml
             cd /tmp && python -m openhands.resolver.send_pull_request \
               --issue-number ${{ env.ISSUE_NUMBER }} \
               --pr-type branch \
