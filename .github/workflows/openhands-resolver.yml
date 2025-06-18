@@ -296,7 +296,7 @@ jobs:
           # Debug output
           echo "=== Config file contents ==="
           cat /tmp/config.toml
-          EOL
+
 
           # Copy config to /tmp and print debug info
           echo "=== Config file contents ==="

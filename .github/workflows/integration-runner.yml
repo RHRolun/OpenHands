@@ -68,6 +68,11 @@ jobs:
           echo "api_key = \"$LLM_API_KEY\"" >> config.toml
           echo "base_url = \"$LLM_BASE_URL\"" >> config.toml
           echo "temperature = 0.0" >> config.toml
+          echo "timeout = 180" >> config.toml
+          echo "num_retries = 10" >> config.toml
+          echo "retry_min_wait = 20" >> config.toml
+          echo "retry_max_wait = 240" >> config.toml
+          echo "retry_multiplier = 2.0" >> config.toml
 
       - name: Build environment
         run: make build
@@ -101,6 +106,11 @@ jobs:
           echo "api_key = \"$LLM_API_KEY\"" >> config.toml
           echo "base_url = \"$LLM_BASE_URL\"" >> config.toml
           echo "temperature = 0.0" >> config.toml
+          echo "timeout = 180" >> config.toml
+          echo "num_retries = 10" >> config.toml
+          echo "retry_min_wait = 20" >> config.toml
+          echo "retry_max_wait = 240" >> config.toml
+          echo "retry_multiplier = 2.0" >> config.toml
 
       - name: Run integration test evaluation for DeepSeek
         env:
@@ -133,6 +143,11 @@ jobs:
           echo "api_key = \"$LLM_API_KEY\"" >> config.toml
           echo "base_url = \"$LLM_BASE_URL\"" >> config.toml
           echo "temperature = 0.0" >> config.toml
+          echo "timeout = 180" >> config.toml
+          echo "num_retries = 10" >> config.toml
+          echo "retry_min_wait = 20" >> config.toml
+          echo "retry_max_wait = 240" >> config.toml
+          echo "retry_multiplier = 2.0" >> config.toml
       - name: Run integration test evaluation for VisualBrowsingAgent (DeepSeek)
         env:
           SANDBOX_FORCE_REBUILD_RUNTIME: True
