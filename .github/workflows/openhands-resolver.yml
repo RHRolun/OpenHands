@@ -258,11 +258,19 @@ jobs:
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
           LLM_TIMEOUT: 1200
-          LLM_NUM_RETRIES: "8"
-          LLM_RETRY_MIN_WAIT: "15"
-          LLM_RETRY_MAX_WAIT: "120"
-          LLM_RETRY_MULTIPLIER: "2.0"
+          LLM_NUM_RETRIES: "20"
+          LLM_RETRY_MIN_WAIT: "5"
+          LLM_RETRY_MAX_WAIT: "60"
+          LLM_RETRY_MULTIPLIER: "1.5"
           REQUESTS_TIMEOUT: "1200"
+          # Force shorter timeouts for other libraries
+          OPENAI_REQUEST_TIMEOUT: "300"
+          ANTHROPIC_TIMEOUT_SEC: "300"
+          HTTP_CLIENT_TIMEOUT: "300"
+          NGINX_TIMEOUT: "300"
+          # Additional retry settings
+          MAX_ATTEMPTS: "20"
+          MAX_RETRIES: "20"
           SANDBOX_TIMEOUT: "6000"
           SANDBOX_COMMAND_TIMEOUT: "1200"
           OPENHANDS_SANDBOX_TIMEOUT: "1200"
@@ -271,7 +279,7 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create config file following template format
+          # Create config file with more frequent retries
           cat > /tmp/config.toml << EOL
           [llm]
           model = "${LLM_MODEL}"
@@ -280,13 +288,15 @@ jobs:
           api_version = "${LLM_API_VERSION}"
           temperature = 0.0
           timeout = 1200
-          num_retries = 8
-          retry_min_wait = 15
-          retry_max_wait = 120
-          retry_multiplier = 2.0
+          num_retries = 20
+          retry_min_wait = 5
+          retry_max_wait = 60
+          retry_multiplier = 1.5
+          max_attempts = 20
 
           [core]
           debug = true
+          log_level = "debug"
           EOL
 
           # Copy config to /tmp and print debug info
