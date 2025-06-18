@@ -257,24 +257,32 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          # Set timeout and retry settings
+          # Comprehensive timeout settings
           TIMEOUT: 1200
           LLM_TIMEOUT: 1200
           REQUESTS_TIMEOUT: 1200
           OPENAI_REQUEST_TIMEOUT: 1200
+          DOCKER_CLIENT_TIMEOUT: 1200
+          DOCKER_TIMEOUT: 1200
+          COMPOSE_HTTP_TIMEOUT: 1200
+          HTTP_CLIENT_TIMEOUT: 1200
+
+          # Retry settings
           LLM_RETRY_MIN_WAIT: "15"
           LLM_RETRY_MAX_WAIT: "120"
           LLM_NUM_RETRIES: "8"
           LLM_RETRY_MULTIPLIER: "2.0"
+
           # Required LLM settings
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           # Sandbox settings
-          SANDBOX_TIMEOUT: 300
+          SANDBOX_TIMEOUT: 1200
+          SANDBOX_COMMAND_TIMEOUT: 1200
           PYTHONPATH: ""
         run: |
-          # Create config file matching template settings
+          # Create config file with sandbox settings
           echo "[llm]" > /tmp/config.toml
           echo "model = \"$LLM_MODEL\"" >> /tmp/config.toml
           echo "api_key = \"$LLM_API_KEY\"" >> /tmp/config.toml
@@ -289,17 +297,16 @@ jobs:
           echo "modify_params = true" >> /tmp/config.toml
           echo "drop_params = false" >> /tmp/config.toml
           echo "" >> /tmp/config.toml
+          echo "[sandbox]" >> /tmp/config.toml
+          echo "timeout = 1200" >> /tmp/config.toml
+          echo "use_host_network = true" >> /tmp/config.toml
+          echo "" >> /tmp/config.toml
           echo "[core]" >> /tmp/config.toml
           echo "debug = true" >> /tmp/config.toml
 
           # Debug output
           echo "=== Config file contents ==="
           cat /tmp/config.toml
-
-          # Copy config to /tmp and print debug info
-          echo "=== Config file contents ==="
-          cat /tmp/config.toml
-          echo "=== Config location ==="
           ls -la /tmp/config.toml
 
           cd /tmp && python -m openhands.resolver.resolve_issue \
