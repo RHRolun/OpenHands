@@ -271,34 +271,26 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create initial config file
-          cat << 'EOF' > /tmp/config.toml
-[llm]
-model = "MODEL_PLACEHOLDER"
-api_key = "API_KEY_PLACEHOLDER"
-base_url = "BASE_URL_PLACEHOLDER"
-api_version = "API_VERSION_PLACEHOLDER"
-temperature = 0.0
-timeout = 1200
-num_retries = 8
-retry_min_wait = 15
-retry_max_wait = 120
-retry_multiplier = 2.0
-modify_params = true
-drop_params = false
-
-[core]
-debug = true
-EOF
-
-          # Replace placeholders with actual values
-          sed -i "s|MODEL_PLACEHOLDER|$LLM_MODEL|g" /tmp/config.toml
-          sed -i "s|API_KEY_PLACEHOLDER|$LLM_API_KEY|g" /tmp/config.toml
-          sed -i "s|BASE_URL_PLACEHOLDER|$LLM_BASE_URL|g" /tmp/config.toml
-          sed -i "s|API_VERSION_PLACEHOLDER|$LLM_API_VERSION|g" /tmp/config.toml
+          # Create config file line by line
+          echo "[llm]" > /tmp/config.toml
+          echo "model = \"$LLM_MODEL\"" >> /tmp/config.toml
+          echo "api_key = \"$LLM_API_KEY\"" >> /tmp/config.toml
+          echo "base_url = \"$LLM_BASE_URL\"" >> /tmp/config.toml
+          echo "api_version = \"$LLM_API_VERSION\"" >> /tmp/config.toml
+          echo "temperature = 0.0" >> /tmp/config.toml
+          echo "timeout = 1200" >> /tmp/config.toml
+          echo "num_retries = 8" >> /tmp/config.toml
+          echo "retry_min_wait = 15" >> /tmp/config.toml
+          echo "retry_max_wait = 120" >> /tmp/config.toml
+          echo "retry_multiplier = 2.0" >> /tmp/config.toml
+          echo "modify_params = true" >> /tmp/config.toml
+          echo "drop_params = false" >> /tmp/config.toml
+          echo "" >> /tmp/config.toml
+          echo "[core]" >> /tmp/config.toml
+          echo "debug = true" >> /tmp/config.toml
 
           # Debug output
-          echo "=== Final config.toml contents ==="
+          echo "=== Config file contents ==="
           cat /tmp/config.toml
 
           # Debug output
