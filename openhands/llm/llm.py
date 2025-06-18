@@ -206,8 +206,8 @@ class LLM(RetryMixin, DebugMixin):
         @self.retry_decorator(
             num_retries=self.config.num_retries,
             retry_exceptions=LLM_RETRY_EXCEPTIONS,
-            retry_min_wait=6000,
-            retry_max_wait=6100,
+            retry_min_wait=self.config.retry_min_wait,
+            retry_max_wait=self.config.retry_max_wait,
             retry_multiplier=self.config.retry_multiplier,
             retry_listener=self.retry_listener,
         )
