@@ -271,13 +271,13 @@ jobs:
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
           PYTHONPATH: ""
         run: |
-          # Create config file with proper TOML format and explicit string quotes
-          cat > /tmp/config.toml << EOL
+          # Create initial config file
+          cat << 'EOF' > /tmp/config.toml
 [llm]
-model = "$(echo $LLM_MODEL)"
-api_key = "$(echo $LLM_API_KEY)"
-base_url = "$(echo $LLM_BASE_URL)"
-api_version = "$(echo $LLM_API_VERSION)"
+model = "MODEL_PLACEHOLDER"
+api_key = "API_KEY_PLACEHOLDER"
+base_url = "BASE_URL_PLACEHOLDER"
+api_version = "API_VERSION_PLACEHOLDER"
 temperature = 0.0
 timeout = 1200
 num_retries = 8
@@ -289,7 +289,17 @@ drop_params = false
 
 [core]
 debug = true
-EOL
+EOF
+
+          # Replace placeholders with actual values
+          sed -i "s|MODEL_PLACEHOLDER|$LLM_MODEL|g" /tmp/config.toml
+          sed -i "s|API_KEY_PLACEHOLDER|$LLM_API_KEY|g" /tmp/config.toml
+          sed -i "s|BASE_URL_PLACEHOLDER|$LLM_BASE_URL|g" /tmp/config.toml
+          sed -i "s|API_VERSION_PLACEHOLDER|$LLM_API_VERSION|g" /tmp/config.toml
+
+          # Debug output
+          echo "=== Final config.toml contents ==="
+          cat /tmp/config.toml
 
           # Debug output
           echo "=== Config file contents ==="
