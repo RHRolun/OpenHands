@@ -257,29 +257,30 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          # Comprehensive timeout settings
-          TIMEOUT: 1200
-          LLM_TIMEOUT: 1200
-          REQUESTS_TIMEOUT: 1200
-          OPENAI_REQUEST_TIMEOUT: 1200
-          DOCKER_CLIENT_TIMEOUT: 1200
-          DOCKER_TIMEOUT: 1200
-          COMPOSE_HTTP_TIMEOUT: 1200
-          HTTP_CLIENT_TIMEOUT: 1200
+          # Shorter timeouts with more retries
+          TIMEOUT: 90
+          LLM_TIMEOUT: 90
+          REQUESTS_TIMEOUT: 90
+          OPENAI_REQUEST_TIMEOUT: 90
+          DOCKER_CLIENT_TIMEOUT: 90
+          DOCKER_TIMEOUT: 90
+          COMPOSE_HTTP_TIMEOUT: 90
+          HTTP_CLIENT_TIMEOUT: 90
 
-          # Retry settings
-          LLM_RETRY_MIN_WAIT: "15"
-          LLM_RETRY_MAX_WAIT: "120"
-          LLM_NUM_RETRIES: "8"
-          LLM_RETRY_MULTIPLIER: "2.0"
+          # More aggressive retry settings
+          LLM_RETRY_MIN_WAIT: "5"
+          LLM_RETRY_MAX_WAIT: "15"
+          LLM_NUM_RETRIES: "20"
+          LLM_RETRY_MULTIPLIER: "1.2"
 
           # Required LLM settings
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
-          # Sandbox settings
-          SANDBOX_TIMEOUT: 1200
-          SANDBOX_COMMAND_TIMEOUT: 1200
+
+          # Sandbox settings with shorter timeouts
+          SANDBOX_TIMEOUT: 90
+          SANDBOX_COMMAND_TIMEOUT: 90
           PYTHONPATH: ""
         run: |
           # Create config file with sandbox settings
@@ -289,17 +290,18 @@ jobs:
           echo "base_url = \"$LLM_BASE_URL\"" >> /tmp/config.toml
           echo "api_version = \"$LLM_API_VERSION\"" >> /tmp/config.toml
           echo "temperature = 0.0" >> /tmp/config.toml
-          echo "timeout = 1200" >> /tmp/config.toml
-          echo "num_retries = 8" >> /tmp/config.toml
-          echo "retry_min_wait = 15" >> /tmp/config.toml
-          echo "retry_max_wait = 120" >> /tmp/config.toml
-          echo "retry_multiplier = 2.0" >> /tmp/config.toml
+          echo "timeout = 90" >> /tmp/config.toml
+          echo "num_retries = 20" >> /tmp/config.toml
+          echo "retry_min_wait = 5" >> /tmp/config.toml
+          echo "retry_max_wait = 15" >> /tmp/config.toml
+          echo "retry_multiplier = 1.2" >> /tmp/config.toml
           echo "modify_params = true" >> /tmp/config.toml
           echo "drop_params = false" >> /tmp/config.toml
           echo "" >> /tmp/config.toml
           echo "[sandbox]" >> /tmp/config.toml
-          echo "timeout = 1200" >> /tmp/config.toml
+          echo "timeout = 90" >> /tmp/config.toml
           echo "use_host_network = true" >> /tmp/config.toml
+          echo "close_delay = 1200" >> /tmp/config.toml
           echo "" >> /tmp/config.toml
           echo "[core]" >> /tmp/config.toml
           echo "debug = true" >> /tmp/config.toml
@@ -341,7 +343,7 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           GIT_USERNAME: ${{ secrets.PAT_USERNAME || 'openhands-agent' }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || inputs.LLM_MODEL }}
-          LLM_TIMEOUT: 1200
+          LLM_TIMEOUT: 90
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_API_VERSION: ${{ inputs.LLM_API_VERSION }}
