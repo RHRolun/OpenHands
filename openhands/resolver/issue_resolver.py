@@ -401,6 +401,8 @@ class IssueResolver:
             shutil.rmtree(self.workspace_base)
         shutil.copytree(os.path.join(self.output_dir, 'repo'), self.workspace_base)
 
+        logger.info(f"App config: {self.app_config}")
+
         runtime = create_runtime(self.app_config)
         await runtime.connect()
 

@@ -270,7 +270,7 @@ jobs:
           # More aggressive retry settings
           LLM_RETRY_MIN_WAIT: "5"
           LLM_RETRY_MAX_WAIT: "15"
-          LLM_NUM_RETRIES: "20"
+          LLM_NUM_RETRIES: "2"
           LLM_RETRY_MULTIPLIER: "1.2"
 
           # Required LLM settings
@@ -291,7 +291,7 @@ jobs:
           echo "api_version = \"$LLM_API_VERSION\"" >> /tmp/config.toml
           echo "temperature = 0.0" >> /tmp/config.toml
           echo "timeout = 180" >> /tmp/config.toml
-          echo "num_retries = 20" >> /tmp/config.toml
+          echo "num_retries = 2" >> /tmp/config.toml
           echo "retry_min_wait = 5" >> /tmp/config.toml
           echo "retry_max_wait = 15" >> /tmp/config.toml
           echo "retry_multiplier = 1.2" >> /tmp/config.toml
