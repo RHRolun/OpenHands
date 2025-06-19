@@ -21,6 +21,7 @@ class AsyncLLM(LLM):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
+        print("ASYNC LLM HERE!!!!!!!!!!!!!!!")
         self._async_completion = partial(
             self._call_acompletion,
             model=self.config.model,
