@@ -184,7 +184,7 @@ class LLM(RetryMixin, DebugMixin):
         print("LLM HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         litellm.request_timeout = 6000  # default timeout in seconds
-        
+
         self._completion = partial(
             litellm_completion,
             model=self.config.model,
@@ -390,6 +390,9 @@ class LLM(RetryMixin, DebugMixin):
 
         Check the complete documentation at https://litellm.vercel.app/docs/completion
         """
+        print("Calling completion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("Positional args:", self._completion.args)
+        print("Keyword args:", self._completion.keywords)
         return self._completion
 
     def init_model_info(self) -> None:
